@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 public class TaskController {
     @Autowired
@@ -28,8 +30,23 @@ public class TaskController {
         }
     }
 
-    @PostMapping("/incluir-tarefa")
-    @Operation(summary = "Salvar uma nova tarefa")
+    @GetMapping("/tarefa/{id}")
+    @Operation(summary = "Recupera uma tarefa pelo ID")
+    public ResponseEntity<Task> listOne(@PathVariable("id") Long id) {
+        try {
+            Optional<Task> taskData = taskRepository.findById(id);
+            if (taskData.isPresent()) {
+                return new ResponseEntity<>(taskData.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/tarefa")
+    @Operation(summary = "Salva uma nova tarefa")
     public ResponseEntity<Task> addTask(@RequestBody Task task) {
         try {
             Task newTask = taskRepository.save(task);
@@ -39,10 +56,12 @@ public class TaskController {
         }
     }
 
-    @PutMapping("/editar-tarefa")
-    @Operation(summary = "Editar uma tarefa")
-    public ResponseEntity<Task> editTask(@RequestBody Task task) {
+    @PutMapping("/tarefa/{id}")
+    @Operation(summary = "Edita uma tarefa")
+    public ResponseEntity<Task> editTask(@PathVariable("id") Long id, @RequestBody Task task) {
         try {
+            Task tarefaEditada = taskRepository.findById(id).get();
+            task.setId(tarefaEditada.getId());
             Task newTask = taskRepository.save(task);
             return new ResponseEntity<>(newTask, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -50,12 +69,13 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/excluir-tarefa")
+    @DeleteMapping("/tarefa/{id}")
     @Operation(summary = "Exclui uma tarefa")
-    public ResponseEntity<Task> removeTask(@RequestBody Task task) {
+    public ResponseEntity<Task> removeTask(@PathVariable("id") Long id) {
         try {
-            taskRepository.delete(task);
-            return new ResponseEntity<>(task, HttpStatus.ACCEPTED);
+            Task taskDeletada = taskRepository.findById(id).get();
+            taskRepository.delete(taskDeletada);
+            return new ResponseEntity<>(taskDeletada, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
