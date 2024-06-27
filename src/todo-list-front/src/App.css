@@ -61,9 +61,6 @@ h1 {
   border-radius: 5px;
   margin-bottom: 1rem;
 }
-.fa-trash {
-  margin-left: 0.75rem;
-}
 .Todo {
   background-color: #5242dd;
   border-style: solid;
@@ -71,15 +68,29 @@ h1 {
   border-width: 1px;
   border-radius: 5px;
   padding: 5px;
-  cursor: pointer;
+  display: flex;
+  justify-content: space-around;
 }
 .incompleted {
   color: #fff;
+  display: flex;
+  align-items: center;
 }
 .completed {
   color: #c5aeff;
   text-decoration: line-through;
+  display: flex;
+  align-items: center;
 }
 .delete-icon {
   cursor: pointer;
+  padding: 5px;
+}
+.edit-icon {
+  cursor: pointer;
+  padding: 5px;
+}
+.check-icon {
+  cursor: pointer;
+  padding: 5px;
 }

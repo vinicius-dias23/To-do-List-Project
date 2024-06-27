@@ -1,18 +1,28 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faSquareCheck, faSquare } from '@fortawesome/free-solid-svg-icons';
 import '../App.css';
 
-export const TodoList = ({ task }) => {
+export const TodoList = ({ task, toggleComplete }) => {
   return (
     <div className='Todo'>
       <p className={`${task.completed ? "completed" : "incompleted"}`}>
         {task.description}
       </p>
-    <div>
+    <div className='icons'>
       <FontAwesomeIcon
-      className='delete-icon'
-      icon={faTrash} />
+        className='check-icon'
+        color='white'
+        onClick={() => { toggleComplete(task.id); }}
+        icon={task.completed ? faSquareCheck : faSquare} />
+      <FontAwesomeIcon
+        className='edit-icon'
+        color='white'
+        icon={faEdit} />
+      <FontAwesomeIcon
+        className='delete-icon'
+        color='white'
+        icon={faTrash} />
     </div>
     </div>
   );
